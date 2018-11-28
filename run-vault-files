@@ -1,0 +1,18 @@
+#!/bin/bash
+
+cd ~/.vault
+rm -R *
+
+echo "run-vault 'namespace' "
+nar="$1"
+nar=${nar:="ucp-rewards-na-develop"}
+service=$(kubectl get pod -n $nar -o=name | grep 'rewards-facade-http' | awk -F/ '{print $2}')
+echo $service
+echo $nar
+
+kubectl exec $service -n $nar -- cat /var/run/secrets/vaultproject.io/vault.json > vault.json
+kubectl exec $service -n $nar -- cat /var/run/secrets/vaultproject.io/vault_encryption.json > vault_encryption.json
+kubectl exec $service -n $nar -- cat /var/run/secrets/cfs/root-ca.pem > transit.pem
+cp transit.pem vault.pem
+
+echo "ok!!"

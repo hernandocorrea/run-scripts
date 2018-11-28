@@ -1,0 +1,22 @@
+#!/bin/bash
+echo "run-service 'service' 'port' 'port2' 'namespace'"
+
+echo "----------"
+echo $1
+echo $2
+echo $3
+echo $4
+echo "----------"
+
+port="$2"
+port2="$3"
+port2=${port2:=$port}
+ports="$port:$port2"
+namespace=$"$4"
+namespace=${namespace:="ucp-rewards-na-develop"}
+service=$(kubectl get pod -n $namespace -o=name | grep $1 | awk -F/ '{print $2}')
+service=${service##* }
+echo $service
+echo $ports
+echo $namespace
+kubectl -n $namespace port-forward $service $ports

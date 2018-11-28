@@ -1,0 +1,5 @@
+echo "run-kube 'namespace'"
+export CONTEXT=$(kubectl config view | awk '/current-context/ {print $2}')
+echo "Context:   $CONTEXT"
+echo "Namespace: $1"
+kubectl config set-context $CONTEXT --namespace=$1

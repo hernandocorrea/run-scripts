@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "run-exec 'service'"
+service=$(kubectl get pod -o=name | grep $1 | awk -F/ '{print $2}')
+echo $service
+kubectl exec -it $service -- bash
